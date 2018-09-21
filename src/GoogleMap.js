@@ -45,7 +45,7 @@ class SimpleMap extends Component {
     this.watchPosition();
   }
   centerToCurrentPos(evt){
-
+    //TODO: on click a button, will center map on geolocation marker
   }
   onMapClick(evt){
 
@@ -88,8 +88,8 @@ class SimpleMap extends Component {
           bootstrapURLKeys={{ key: GOOGLE_API_KEY}}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
-          center = {this.state.currentPos}
-        >
+          // center = {this.state.currentPos}
+          >
           <GeolocationMarker
             lat={this.state.currentPos.lat}
             lng={this.state.currentPos.lng}
