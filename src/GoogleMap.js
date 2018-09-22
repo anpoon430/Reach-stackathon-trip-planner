@@ -103,6 +103,7 @@ class SimpleMap extends Component {
           onClick = {this.onMapClick}
           >
             <GeolocationMarker
+              key = 'geolocationMarker'
               lat={this.state.currentPos.lat}
               lng={this.state.currentPos.lng} />
             {

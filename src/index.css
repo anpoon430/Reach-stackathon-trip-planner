@@ -1,11 +1,12 @@
-body { margin:0; padding:0; }
-#map { position:absolute; top:0; bottom:0; width:100%; }
+body {
+  margin: 0;
+  padding: 0;
+}
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
 
-.marker{
-  font-size: 40px;
-  transform: translate(-50%, -100%);
-}
-.marker:hover{
-  transform: translate(-50%, -100%);
-  font-size: 48px;
-}
+
