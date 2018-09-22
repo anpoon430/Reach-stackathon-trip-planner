@@ -2,23 +2,13 @@ import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { GOOGLE_API_KEY } from './secrets';
 import axios from 'axios';
-import { fitBounds } from 'google-map-react/utils'
+import { fitBounds } from 'google-map-react/utils';
+import Button from '@material-ui/core/Button';
+import {
+  GeolocationMarker,
+  Marker
+}   from './Markers';
 
-const GeolocationMarker = () => {
-  const styles = {
-    marker: {
-      backgroundColor: '#448AFF',
-      border: 'solid 3px white',
-      borderRadius: '50%',
-      transform: 'translate(-50%, -50%)',
-      width: 20,
-      height: 20
-    }
-  }
-  return (
-            <div style = {styles.marker}> </div>
-          );
-}
 class SimpleMap extends Component {
   static defaultProps = {
     center: {
@@ -34,21 +24,34 @@ class SimpleMap extends Component {
         lat: 40.7049362,
         lng: -74.009193
       },
-      geoWatchId: 1
+      geoWatchId: 1,
+      markers: []
     }
     this.setCoords = this.setCoords.bind(this);
     this.watchPosition = this.watchPosition.bind(this);
     this.getCurrentPosition = this.getCurrentPosition.bind(this);
+    this.onMapClick = this.onMapClick.bind(this);
   }
   componentDidMount(){
-    // this.getCurrentPosition();
     this.watchPosition();
   }
   centerToCurrentPos(evt){
     //TODO: on click a button, will center map on geolocation marker
+    this.setState(state => {
+      return {
+        ...state,
+
+      }
+    })
+
   }
   onMapClick(evt){
-
+   this.setState(state => {
+     return {
+       ...state,
+      markers: [...state.markers, evt]
+      }
+   })
   }
   setCoords = ({coords}) => {
     this.setState({
@@ -79,8 +82,17 @@ class SimpleMap extends Component {
       console.log('geolocation is not available');
     }
   }
-
+  renderMarkers(){
+    return this.state.markers.map((loc, i) => {
+      return (
+       <Marker
+         key = {i}
+         lat={loc.lat}
+         lng={loc.lng} />)
+     });
+  }
   render() {
+    console.log(this.state.currentPos);
     return (
       // Important! Always set the container height explicitly
       <div style={{ height: '100vh', width: '100%' }}>
@@ -88,12 +100,15 @@ class SimpleMap extends Component {
           bootstrapURLKeys={{ key: GOOGLE_API_KEY}}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
-          // center = {this.state.currentPos}
+          onClick = {this.onMapClick}
           >
-          <GeolocationMarker
-            lat={this.state.currentPos.lat}
-            lng={this.state.currentPos.lng}
-          />
+            <GeolocationMarker
+              lat={this.state.currentPos.lat}
+              lng={this.state.currentPos.lng} />
+            {
+              this.renderMarkers()
+            }
+          {/* <Button/> */}
         </GoogleMapReact>
       </div>
     );
