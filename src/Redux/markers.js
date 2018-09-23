@@ -105,7 +105,8 @@ const markers = (state = initialState, action) => {
       return {
         ...state,
         list: state.list.filter((marker, i) => {
-          return  i === action.idx
+          console.log('REMOVING MARKER, INSIDE REDUCER', i);
+          return  i !== action.idx
         })
       }
     default:

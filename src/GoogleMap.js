@@ -133,7 +133,8 @@ render() {
               this.props.setMap(google.maps)
             }}
             onChildClick = {(idx) => {
-              this.props.rmMarker(idx)
+              console.log('MARKER CLICKKED!!!', idx);
+              this.props.rmMarker(Number(idx))
             }}
             >
               <GeolocationMarker
@@ -167,6 +168,7 @@ const mapDispatch = dispatch => ({
      dispatch(fetchDistanceMatix(...args));
    },
    rmMarker(idx){
+     console.log('DISPATCHING ACTION REMOVE MARKER');
      dispatch(removeMarker(idx));
    }
 })

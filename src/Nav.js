@@ -13,6 +13,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 import SearchIcon from '@material-ui/icons/Search';
 import GpsFixed from '@material-ui/icons/GpsFixed';
+import Countdown from 'react-countdown-now';
+
 
 const styles = theme => ({
   root: {
@@ -101,10 +103,13 @@ class Nav extends Component {
                 {googlemap && googlemap.places &&
                 <SearchBox />}
               </div>
+            <Countdown />
+
             <IconButton
               onClick={centerButton}>
               <GpsFixed />
             </IconButton>
+
           </Toolbar>
         </AppBar>
       </div>
