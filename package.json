@@ -6,17 +6,15 @@
     "@material-ui/core": "^3.1.0",
     "@material-ui/icons": "^3.0.1",
     "axios": "^0.18.0",
-    "geolocation-marker": "^2.0.5",
     "google-map-react": "^1.0.7",
-    "mapbox-gl": "^0.49.0-beta.1",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
-    "react-map-gl": "^3.3.4",
+    "react-places-autocomplete": "^7.2.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.5",
+    "react-select": "^2.0.0",
     "redux": "^4.0.0",
-    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
@@ -26,6 +24,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "redux-devtools-extension": "^2.13.5"
+    "redux-devtools-extension": "^2.13.5",
+    "redux-logger": "^3.0.6"
   }
 }

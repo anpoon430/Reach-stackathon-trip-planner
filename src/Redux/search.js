@@ -13,7 +13,7 @@ export const setPosition = position => ({
   position
 })
 
-const location = (state = initialState, action) => {
+const search = (state = initialState, action) => {
   switch (action.type){
     case SET_POSITION:
       return {
@@ -25,4 +25,4 @@ const location = (state = initialState, action) => {
   }
 }
 
-export default location;
+export default search;

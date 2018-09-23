@@ -1,12 +1,12 @@
 const initialState = {
-  maps: {}
+  maps: {},
 }
 
 const SET_MAP = 'SET_MAP';
 
-export const setMap = mapObj => ({
+export const setMap = (mapsObj, map, google) => ({
   type: SET_MAP,
-  mapObj
+  mapsObj,
 })
 
 const map = (state= initialState, action) => {
@@ -14,7 +14,7 @@ const map = (state= initialState, action) => {
     case SET_MAP:
       return {
         ...state,
-        maps: {...action.mapObj}
+        maps: {...action.mapsObj}
       }
     default:
       return state
