@@ -1,14 +1,22 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from "react";
+import { Provider } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
+import store from './Redux/store';
 
-import SimpleMap from './GoogleMap';
+import "./App.css";
+
+import SimpleMap from "./GoogleMap";
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <SimpleMap />
-      </div>
+    <Provider store = {store}>
+        <Router>
+          <div className="App">
+            <SimpleMap />
+          </div>
+        </Router>
+    </Provider>
     );
   }
 }

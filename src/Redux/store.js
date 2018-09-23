@@ -1,22 +1,21 @@
 import thunk from 'redux-thunk'
-import {createStore, applyMiddleware, compose, combineReducers} from 'redux'
+import {createStore, applyMiddleware, combineReducers} from 'redux'
+import { createLogger } from 'redux-logger'
+import { composeWithDevTools } from 'redux-devtools-extension';
 import markers from './markers'
 import timer from './timer'
-
-
-//redux devtools:
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+import map from './map'
 
 const reducer = combineReducers({
+  map,
   markers,
-  location,
   timer
 })
 
 
 const store = createStore(
   reducer,
-  composeEnhancers(applyMiddleware(thunk))
+  composeWithDevTools(applyMiddleware(thunk, createLogger({collapsed: true})))
 )
 
 export default store;
