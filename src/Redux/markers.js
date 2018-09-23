@@ -15,6 +15,12 @@ const initialState = {
 const SET_MARKERS = 'SET_MARKERS';
 const ADD_MARKER = 'ADD_MARKER';
 const SET_MARKERS_WITH_TIME_DATA = 'SET_MARKERS_WITH_TIME_DATA';
+const REMOVE_MARKER = 'REMOVE_MARKER';
+
+export const removeMarker = idx => ({
+  type: REMOVE_MARKER,
+  idx
+})
 
 export const setMarkers = markers => ({
   type: SET_MARKERS,
@@ -94,7 +100,13 @@ const markers = (state = initialState, action) => {
             // reachability: state.timer.timeLeft.getSeconds() - action.data[i].duration.value > 0
           }
         })
-
+      }
+    case REMOVE_MARKER:
+      return {
+        ...state,
+        list: state.list.filter((marker, i) => {
+          return  i === action.idx
+        })
       }
     default:
       return state

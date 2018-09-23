@@ -3,11 +3,12 @@ import GoogleMapReact from 'google-map-react';
 import { GOOGLE_API_KEY } from './secrets';
 import { connect } from 'react-redux';
 import { GeolocationMarker, Marker } from './Markers';
-import Button from '@material-ui/core/Button';
 import {setMap} from './Redux/map';
+import { addMarker, fetchDistanceMatix, removeMarker } from './Redux/markers';
 
-import { addMarker, fetchDistanceMatix } from './Redux/markers';
-import { AppBar } from '@material-ui/core';
+import Nav from './Nav';
+
+
 
 class SimpleMap extends Component {
   static defaultProps = {
@@ -95,7 +96,7 @@ class SimpleMap extends Component {
         lat: this.state.currentPosition.lat,
         lng: this.state.currentPosition.lng
       }
-    }, ()=> { //reset center so that next time button is clicked will work even if position didn't change
+    }, ()=> { //reset center even user location didn't change
     this.setState({
       center: {}
     })
@@ -105,6 +106,7 @@ class SimpleMap extends Component {
     return this.props.markers.map((loc, i) => {
       return (
       <Marker
+
         duration={loc.duration}
         durationValue={loc.durationValue}
         key = {i}
@@ -113,19 +115,11 @@ class SimpleMap extends Component {
     });
   }
 render() {
+
     return (
       // Important! Always set the container height explicitly
-        <Fragment>
-          <AppBar position='fixed'>
-            <Button
-              variant= 'outlined'
-              size='small'
-              key = 'center-button'
-              id = 'center-button'
-              onClick={this.centerToCurrentPosition}>
-              CENTER
-            </Button>
-          </AppBar>
+      <Fragment>
+        <Nav centerButton ={this.centerToCurrentPosition}/>
         <div id = 'google-map' >
           <GoogleMapReact
             bootstrapURLKeys={{ key: GOOGLE_API_KEY}}
@@ -135,7 +129,12 @@ render() {
             center={this.state.center}
             yesIWantToUseGoogleMapApiInternals = {true}
             onGoogleApiLoaded={(google) => {
-              this.props.setMap(google.maps)}}
+              console.log(google);
+              this.props.setMap(google.maps)
+            }}
+            onChildClick = {(idx) => {
+              this.props.rmMarker(idx)
+            }}
             >
               <GeolocationMarker
                 key = 'geolocationMarker'
@@ -146,19 +145,19 @@ render() {
               }
           </GoogleMapReact>
         </div>
-        </Fragment>
+      </Fragment>
     );
   }
 }
 
-const mapState = ({markers}) => ({
+const mapState = ({markers, map}) => ({
   markers: markers.list,
   mode: markers.mode
 })
 
 const mapDispatch = dispatch => ({
-  setMap(mapObj){
-    dispatch(setMap(mapObj));
+  setMap(mapsObj){
+    dispatch(setMap(mapsObj));
   },
   addMarker({lat, lng}){
     let marker = {lat, lng};
@@ -166,6 +165,9 @@ const mapDispatch = dispatch => ({
    },
    setTimeData(...args){
      dispatch(fetchDistanceMatix(...args));
+   },
+   rmMarker(idx){
+     dispatch(removeMarker(idx));
    }
 })
 

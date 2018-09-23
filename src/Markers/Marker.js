@@ -10,17 +10,17 @@ const styles = {
   marker:{
     padding: 3,
     backgroundColor: 'white',
-    border: 'solid black 3px',
-    width: 50,
+    border: 'solid black 1.5px',
+    width: 45,
     height:15,
     transform: 'translate(-50%, -50%)'
   },
   markerHover: {
     padding: 3,
-    width: 50,
+    width: 45,
     height:15,
     backgroundColor: 'white',
-    border: 'solid black 3px',
+    border: 'solid black 1.5px',
     transform: 'translate(-50%, -50%) scale(1.5)',
   }
 }
@@ -44,4 +44,6 @@ Marker.propTypes = {
 // const mapState = ({markers}) => ({
 //   markerDetails: markers.list.find(())
 // })
+
+
 export default withStyles(styles)(Marker);
