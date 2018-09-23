@@ -7,21 +7,21 @@ import { connect } from 'react-redux';
 
 
 const styles = {
-  marker: {
-    padding: 5,
-    backgroundImage: 'url(infowindow.png)',
+  marker:{
+    padding: 3,
     backgroundColor: 'white',
+    border: 'solid black 3px',
     width: 50,
-    height:36,
-    transform: 'translate(0%, -100%)'
+    height:15,
+    transform: 'translate(-50%, -50%)'
   },
   markerHover: {
-    padding: 5,
-    width:50,
-    height:36,
+    padding: 3,
+    width: 50,
+    height:15,
     backgroundColor: 'white',
-    backgroundImage: 'url(infowindow.png)',
-    transform: 'translate(0%, -100%) scale(1.5)',
+    border: 'solid black 3px',
+    transform: 'translate(-50%, -50%) scale(1.5)',
   }
 }
 
@@ -30,10 +30,8 @@ const Marker = props => {
 
   let style = props.$hover ? classes.markerHover: classes.marker;
   return (
-            <div className={style} >
-              <p>
-                {duration}
-              </p>
+            <div className = {style} >
+              {duration}
             </div>
           );
 }

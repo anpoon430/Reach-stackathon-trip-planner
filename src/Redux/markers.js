@@ -40,7 +40,11 @@ export const fetchDistanceMatix = (origin, destinations, mode) =>{
       service.getDistanceMatrix(
         {
           origins: [origin],
-          destinations: destinations.map(marker => ({lat: marker.lat, lng: marker.lng})),
+          destinations: destinations.map(
+            marker => ({
+              lat: marker.lat,
+              lng: marker.lng
+            })),
           travelMode: mode,
         }, callback
       );
@@ -50,6 +54,8 @@ export const fetchDistanceMatix = (origin, destinations, mode) =>{
         if (status === 'OK'){
           pointsWithData = res.rows[0].elements;
           dispatch(setMarkersWithTimeData(pointsWithData));
+        } else {
+          console.log('Travel time could not be calculated for the points of interest');
         }
       }
     } catch (error) {
@@ -74,6 +80,13 @@ const markers = (state = initialState, action) => {
       return {
         ...state,
         list: state.list.map((marker, i) => {
+          if (action.data[i].status !== 'OK') {
+            return {
+              ...marker,
+              duration: '?',
+              value: '?'
+            }
+          }
           return {
             ...marker,
             duration: action.data[i].duration.text,

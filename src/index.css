@@ -9,28 +9,3 @@ body {
   margin-top: 5vh;
 }
 
-/* .speech-bubble {
-	position: relative;
-	background: #f8f4f9;
-	border-radius: .4em;
-} */
-
-.speech-bubble:after {
-	content: '';
-	position: absolute;
-	bottom: 0;
-	left: 50%;
-	width: 0;
-	height: 0;
-	border: 20px solid transparent;
-	border-top-color: #f8f4f9;
-	border-bottom: 0;
-	margin-left: -20px;
-	margin-bottom: -20px;
-}
-/* .speech-bubble-hover{
-  position: relative;
-	background: #f8f4f9;
-	border-radius: .4em;
-  transform: scale(1.5);
-} */
