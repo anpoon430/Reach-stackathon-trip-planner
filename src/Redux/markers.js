@@ -49,8 +49,8 @@ export const fetchDistanceMatix = (origin, destinations, mode) =>{
         let pointsWithData;
         if (status === 'OK'){
           pointsWithData = res.rows[0].elements;
+          dispatch(setMarkersWithTimeData(pointsWithData));
         }
-        dispatch(setMarkersWithTimeData(pointsWithData));
       }
     } catch (error) {
       console.error(error);
