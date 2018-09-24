@@ -7,30 +7,21 @@ import { connect } from 'react-redux';
 
 
 const styles = {
-  marker:{
+  markerReachable:{
     padding: 3,
     backgroundColor: 'white',
-    border: 'solid black 1.5px',
+    border: 'solid green 1.5px',
     width: 45,
     height:15,
     transform: 'translate(-50%, -50%)'
   },
-  markerHover: {
+  markerReachableHover: {
     padding: 3,
     width: 45,
     height:15,
     backgroundColor: 'white',
-    border: 'solid black 1.5px',
+    border: 'solid green 1.5px',
     transform: 'translate(-50%, -50%) scale(1.5)',
-  },
-  markerReachable: {
-    padding: 3,
-    width: 45,
-    height:15,
-    backgroundColor: 'green',
-    color: 'white',
-    border: 'solid white 1.5px',
-    transform: 'translate(-50%, -50%)',
   },
   markerNotReachable: {
     padding: 3,
@@ -41,28 +32,51 @@ const styles = {
     border: 'solid red 1.5px',
     transform: 'translate(-50%, -50%)',
   },
+  markerNotReachableHover: {
+    padding: 3,
+    width: 45,
+    height:15,
+    backgroundColor: 'white',
+    color: 'black',
+    border: 'solid red 1.5px',
+    transform: 'translate(-50%, -50%) scale(1.5)',
+  },
 
 }
 
-const Marker = props => {
-  const { classes, duration, durationValue } = props;
+const reach = {
+  'true': {
+    hover: 'markerReachableHover',
+    noHover: 'markerReachable'
+  },
+  'false': {
+    hover: 'markerNotReachableHover',
+    noHover: 'markerNotReachable'
+  }
+}
 
-  let style = props.$hover ? classes.markerHover: classes.marker;
+const Marker = props => {
+  const { classes, duration, address, reachability} = props;
+  let hover = props.$hover? 'hover' : 'noHover';
+  let reachable = String(reachability);
   return (
-            <div className = {style} >
-              {duration}
-            </div>
-          );
+      <div className = {classes[reach[reachable][hover]]} >
+        <div>
+          {duration}
+        </div>
+       {props.$hover &&
+       <div>
+          {address}
+        </div>
+      }
+      </div>
+  )
 }
 
 
 Marker.propTypes = {
   classes: PropTypes.object.isRequired
 };
-
-// const mapState = ({markers}) => ({
-//   markerDetails: markers.list.find(())
-// })
 
 
 export default withStyles(styles)(Marker);

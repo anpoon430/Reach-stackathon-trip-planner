@@ -104,11 +104,16 @@ class SimpleMap extends Component {
 }
   renderMarkers(){
     return this.props.markers.map((loc, i) => {
+      let reach;
+      if (loc.reachability === undefined) reach = false;
+      else reach = loc.reachability;
       return (
       <Marker
 
         duration={loc.duration}
         durationValue={loc.durationValue}
+        address = {loc.address || ''}
+        reachability = {reach}
         key = {i}
         lat={loc.lat}
         lng={loc.lng} />)

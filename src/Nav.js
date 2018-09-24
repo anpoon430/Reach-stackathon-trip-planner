@@ -107,7 +107,18 @@ const convertTime = (timeObj) => {
   return miliseconds;
 }
 
+let timeLeft = 0;
 const Completionist = () => (<span>TIME!!!</span>)
+let renderer = ({ hours, minutes, seconds, completed }) => {
+  if (completed) {
+    // Render a completed state
+  return <Completionist />;
+  } else {
+// Render a countdown
+  timeLeft = Math.floor(convertTime({h: hours, m: minutes, s: seconds})/1000);
+  return <span>{zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
+  }
+};
 
 class Nav extends Component {
   constructor(props){
@@ -123,18 +134,7 @@ class Nav extends Component {
       }
     }
     this.distMatrixIntervalId = 1;
-    this.timeLeft= 0;
     }
-    renderer = ({ hours, minutes, seconds, completed }) => {
-      if (completed) {
-        // Render a completed state
-      return <Completionist />;
-      } else {
-    // Render a countdown
-      this.timeLeft = Math.floor(convertTime({h: hours, m: minutes, s: seconds})/1000);
-      return <span>{zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
-      }
-    };
   handleChange = (evt) => {
     this.setState({
       timer: {
@@ -161,7 +161,7 @@ class Nav extends Component {
           console.log('setting time data!!!!!!')
           try {
             await this.props.setTimeData(origin);
-            this.props.getReachability(this.timeLeft);
+            this.props.getReachability(timeLeft);
           } catch (error) {
             console.error(error)
           }
@@ -174,7 +174,7 @@ class Nav extends Component {
             console.log('setting time data!!!!!!')
             try {
               await this.props.setTimeData(origin);
-              this.props.getReachability(this.timeLeft);
+              this.props.getReachability(timeLeft);
             } catch (error) {
               console.error(error)
             }
@@ -239,7 +239,7 @@ class Nav extends Component {
               <Countdown date = {
                 Date.now() + convertTime(timer.input)}
                 daysInHours = {true}
-                renderer = {this.renderer}
+                renderer = {renderer}
                 >
             </Countdown>
                 : <span>{zeroPad(h)}:{zeroPad(m)}:{zeroPad(s)}</span>
