@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { AppBar } from '@material-ui/core';
+import { AppBar, TextField } from '@material-ui/core';
 import SearchBox from './SearchBox';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,6 +14,9 @@ import { withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import GpsFixed from '@material-ui/icons/GpsFixed';
 import Countdown from 'react-countdown-now';
+import TimerIcon from '@material-ui/icons/Timer';
+import TimerOffIcon from '@material-ui/icons/TimerOff';
+
 
 
 const styles = theme => ({
@@ -84,14 +87,66 @@ const styles = theme => ({
       display: 'none',
     },
   },
+  timerInput:{
+    width: 50,
+    marginRight: 5,
+  }
 });
 
+const convertTime = (timeObj) => {
+  const time = {
+    'h': 3600000,
+    'm': 60000,
+    's': 1000,
+  }
+  let miliseconds = Number(timeObj.h)*time.h
+  + Number(timeObj.m)*time.m + Number(timeObj.s)*time.s;
+  return miliseconds;
+}
 
 class Nav extends Component {
-
+  constructor(props){
+    super(props);
+    this.state = {
+      timer: {
+        input: {
+          h: 0,
+          m: 0,
+          s: 0
+        },
+        started: false
+      }
+    }
+  }
+  handleChange = (evt) => {
+    this.setState({
+      timer: {
+        input: {
+          ...this.state.timer.input,
+        [evt.target.name]: evt.target.value
+       }}
+      }
+    );
+  }
+  handleClick = () => {
+    this.setState((state) => {
+      return {
+        ...state,
+        timer: {
+          input: {...state.timer.input},
+          started: !state.timer.started
+        }
+      }
+    }
+    );
+  }
   render(){
     const { classes, googlemap, centerButton } = this.props;
-    console.log(googlemap);
+    // console.log(googlemap);
+    // console.log('TIMER IS....', this.state.timer.started);
+    const {timer} = this.state;
+    const {h, m, s} = timer.input;
+    console.log(timer.input);
     return (
       <div className = {classes.root}>
         <AppBar position='fixed'>
@@ -103,7 +158,47 @@ class Nav extends Component {
                 {googlemap && googlemap.places &&
                 <SearchBox />}
               </div>
-            <Countdown />
+              <div>
+                <IconButton>
+                  {
+                    this.state.timer.started ?
+                    <TimerOffIcon onClick={this.handleClick} />
+                    : <TimerIcon onClick={this.handleClick}/>
+                  }
+                </IconButton>
+                <TextField
+                  className={classes.timerInput}
+                  label = 'H'
+                  type= 'number'
+                  name = 'h'
+                  onChange = {this.handleChange}
+                  value = {this.state.timer.input.h || 0}
+                />
+                <TextField
+                  className={classes.timerInput}
+                  label = 'M'
+                  type= 'number'
+                  name = 'm'
+                  onChange = {this.handleChange}
+                  value = {this.state.timer.input.m || 0}
+                />
+                <TextField
+                  className={classes.timerInput}
+                  label = 'S'
+                  type= 'number'
+                  name = 's'
+                  onChange = {this.handleChange}
+                  value = {this.state.timer.input.s || 0}
+                />
+              </div>
+            {timer.started ?
+              <Countdown date = {
+                Date.now() + convertTime(timer.input)}
+                daysInHours = {true}
+                >
+            </Countdown>
+                : <span>{h}:{m}:{s}</span>
+            }
 
             <IconButton
               onClick={centerButton}>
@@ -116,6 +211,8 @@ class Nav extends Component {
     )
   }
 }
+
+
 
 Nav.propTypes = {
   classes: PropTypes.object.isRequired,

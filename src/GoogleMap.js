@@ -129,11 +129,11 @@ render() {
             center={this.state.center}
             yesIWantToUseGoogleMapApiInternals = {true}
             onGoogleApiLoaded={(google) => {
-              console.log(google);
+              // console.log(google);
               this.props.setMap(google.maps)
             }}
             onChildClick = {(idx) => {
-              console.log('MARKER CLICKKED!!!', idx);
+
               this.props.rmMarker(Number(idx))
             }}
             >
