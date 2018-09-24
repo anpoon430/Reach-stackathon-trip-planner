@@ -22,7 +22,26 @@ const styles = {
     backgroundColor: 'white',
     border: 'solid black 1.5px',
     transform: 'translate(-50%, -50%) scale(1.5)',
-  }
+  },
+  markerReachable: {
+    padding: 3,
+    width: 45,
+    height:15,
+    backgroundColor: 'green',
+    color: 'white',
+    border: 'solid white 1.5px',
+    transform: 'translate(-50%, -50%)',
+  },
+  markerNotReachable: {
+    padding: 3,
+    width: 45,
+    height:15,
+    backgroundColor: 'white',
+    color: 'black',
+    border: 'solid red 1.5px',
+    transform: 'translate(-50%, -50%)',
+  },
+
 }
 
 const Marker = props => {

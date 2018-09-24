@@ -13,10 +13,10 @@ import { withStyles } from '@material-ui/core/styles';
 
 import SearchIcon from '@material-ui/icons/Search';
 import GpsFixed from '@material-ui/icons/GpsFixed';
-import Countdown from 'react-countdown-now';
+import Countdown, {zeroPad} from 'react-countdown-now';
 import TimerIcon from '@material-ui/icons/Timer';
 import TimerOffIcon from '@material-ui/icons/TimerOff';
-import {fetchDistanceMatix,} from './Redux/markers';
+import {fetchDistanceMatix, setReachability} from './Redux/markers';
 
 
 
@@ -107,6 +107,8 @@ const convertTime = (timeObj) => {
   return miliseconds;
 }
 
+const Completionist = () => (<span>TIME!!!</span>)
+
 class Nav extends Component {
   constructor(props){
     super(props);
@@ -118,10 +120,21 @@ class Nav extends Component {
           s: 0
         },
         started: false,
-        distMatrixIntervalId: 1
       }
     }
-  }
+    this.distMatrixIntervalId = 1;
+    this.timeLeft= 0;
+    }
+    renderer = ({ hours, minutes, seconds, completed }) => {
+      if (completed) {
+        // Render a completed state
+      return <Completionist />;
+      } else {
+    // Render a countdown
+      this.timeLeft = Math.floor(convertTime({h: hours, m: minutes, s: seconds})/1000);
+      return <span>{zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
+      }
+    };
   handleChange = (evt) => {
     this.setState({
       timer: {
@@ -148,6 +161,7 @@ class Nav extends Component {
           console.log('setting time data!!!!!!')
           try {
             await this.props.setTimeData(origin);
+            this.props.getReachability(this.timeLeft);
           } catch (error) {
             console.error(error)
           }
@@ -160,16 +174,15 @@ class Nav extends Component {
             console.log('setting time data!!!!!!')
             try {
               await this.props.setTimeData(origin);
+              this.props.getReachability(this.timeLeft);
             } catch (error) {
               console.error(error)
             }
           }
         }, 30000);
-        this.setState({
-          distMatrixIntervalId
-        })
+        this.distMatrixIntervalId = distMatrixIntervalId;
       } else {
-        clearInterval(this.state.distMatrixIntervalId);
+        clearInterval(this.distMatrixIntervalId);
       }
     }
     );
@@ -226,9 +239,10 @@ class Nav extends Component {
               <Countdown date = {
                 Date.now() + convertTime(timer.input)}
                 daysInHours = {true}
+                renderer = {this.renderer}
                 >
             </Countdown>
-                : <span>{h}:{m}:{s}</span>
+                : <span>{zeroPad(h)}:{zeroPad(m)}:{zeroPad(s)}</span>
             }
 
             <IconButton
@@ -258,6 +272,9 @@ const mapDispatch = (dispatch) => ({
   setTimeData(...args){
     dispatch(fetchDistanceMatix(...args));
   },
+  getReachability(timeLeft){
+    dispatch(setReachability(timeLeft));
+  }
 })
 
 export default withStyles(styles)(connect(mapState, mapDispatch)(Nav));

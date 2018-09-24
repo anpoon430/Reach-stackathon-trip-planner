@@ -23,7 +23,12 @@ const ADD_MARKER = 'ADD_MARKER';
 const SET_MARKERS_WITH_TIME_DATA = 'SET_MARKERS_WITH_TIME_DATA';
 const REMOVE_MARKER = 'REMOVE_MARKER';
 const SET_MODE = 'SET_MODE';
+const SET_REACHABILITY = 'SET_REACHABILITY';
 
+export const setReachability = timeLeft => ({
+  type: SET_REACHABILITY,
+  timeLeft
+})
 
 export const setMode = mode => ({
   type: SET_MODE,
@@ -45,9 +50,10 @@ export const addMarker = marker => ({
   marker
 })
 
-export const setMarkersWithTimeData = data => ({
+export const setMarkersWithTimeData = (timeData, addressData) => ({
   type: SET_MARKERS_WITH_TIME_DATA,
-  data
+  timeData,
+  addressData
 })
 
 export const fetchDistanceMatix = (origin) =>{
@@ -70,10 +76,12 @@ export const fetchDistanceMatix = (origin) =>{
       );
 
       function callback(res, status) {
-        let pointsWithData;
+        let timeData;
+        let addressData;
         if (status === 'OK'){
-          pointsWithData = res.rows[0].elements;
-          dispatch(setMarkersWithTimeData(pointsWithData));
+          timeData = res.rows[0].elements;
+          addressData = res.destinationAddresses;
+          dispatch(setMarkersWithTimeData(timeData, addressData));
         } else {
           console.log('Travel time could not be calculated for the points of interest');
         }
@@ -100,7 +108,7 @@ const markers = (state = initialState, action) => {
       return {
         ...state,
         list: state.list.map((marker, i) => {
-          if (action.data[i].status !== 'OK') {
+          if (action.timeData[i].status !== 'OK') {
             return {
               ...marker,
               duration: '?',
@@ -109,9 +117,9 @@ const markers = (state = initialState, action) => {
           }
           return {
             ...marker,
-            duration: action.data[i].duration.text,
-            durationValue: action.data[i].duration.value,
-            // reachability: state.timer.timeLeft.getSeconds() - action.data[i].duration.value > 0
+            duration: action.timeData[i].duration.text,
+            durationValue: action.timeData[i].duration.value,
+            address: action.addressData[i]
           }
         })
       }
@@ -127,6 +135,16 @@ const markers = (state = initialState, action) => {
       return {
         ...state,
         mode: action.mode
+      }
+    case SET_REACHABILITY:
+      return {
+        ...state,
+        list: state.list.map((marker, i) => {
+          if (!marker.durationValue) return {...marker, reachability: false};
+          let condition = action.timeLeft - marker.durationValue > 0;
+          if (condition) return {...marker, reachability: true};
+          return {...marker, reachability: false};
+        })
       }
     default:
       return state
