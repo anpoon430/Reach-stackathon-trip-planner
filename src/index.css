@@ -4,12 +4,15 @@ body {
 }
 
 #google-map{
-  height: 95vh;
+  height: 82vh;
   width: 100%;
-  margin-top: 5vh;
+  margin-top: 10vh;
 }
 
 .autocomplete-dropdown-container{
   overflow: visible;
 }
 
+#bottom-tabs{
+  height: 8vh;
+}

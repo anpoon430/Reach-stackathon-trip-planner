@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { GeolocationMarker, Marker } from './Markers';
 import {setMap} from './Redux/map';
 import { addMarker, fetchDistanceMatix, removeMarker } from './Redux/markers';
-
+import BottomTabs from './BottomTabs';
 import Nav from './Nav';
 
 
@@ -146,6 +146,7 @@ render() {
               }
           </GoogleMapReact>
         </div>
+        <BottomTabs/>
       </Fragment>
     );
   }
