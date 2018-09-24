@@ -41,19 +41,19 @@ class SimpleMap extends Component {
   }
   componentDidMount(){
     this.watchPosition();
-    let distMatrixIntervalId = setInterval(async()=>{
-      const {mode} = this.props;
-      const origin = this.state.currentPosition;
-      const dest = this.props.markers;
+    // let distMatrixIntervalId = setInterval(async()=>{
+    //   const {mode} = this.props;
+    //   const origin = this.state.currentPosition;
+    //   const dest = this.props.markers;
 
-      if (dest && dest.length){
-        console.log('setting time data!!!!!!')
-        await this.props.setTimeData(origin, dest, mode);
-      }
-    }, 30000)
-    this.setState({
-      distMatrixIntervalId
-    })
+    //   if (dest && dest.length){
+    //     console.log('setting time data!!!!!!')
+    //     await this.props.setTimeData(origin, dest, mode);
+    //   }
+    // }, 30000)
+    // this.setState({
+    //   distMatrixIntervalId
+    // })
   }
 
   componentWillUnmount(){
@@ -119,7 +119,10 @@ render() {
     return (
       // Important! Always set the container height explicitly
       <Fragment>
-        <Nav centerButton ={this.centerToCurrentPosition}/>
+        <Nav
+          origin = {this.state.currentPosition}
+          centerButton ={this.centerToCurrentPosition}
+        />
         <div id = 'google-map' >
           <GoogleMapReact
             bootstrapURLKeys={{ key: GOOGLE_API_KEY}}
@@ -164,9 +167,6 @@ const mapDispatch = dispatch => ({
   addMarker({lat, lng}){
     let marker = {lat, lng};
     dispatch(addMarker(marker));
-   },
-   setTimeData(...args){
-     dispatch(fetchDistanceMatix(...args));
    },
    rmMarker(idx){
      console.log('DISPATCHING ACTION REMOVE MARKER');

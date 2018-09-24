@@ -16,12 +16,15 @@ import GpsFixed from '@material-ui/icons/GpsFixed';
 import Countdown from 'react-countdown-now';
 import TimerIcon from '@material-ui/icons/Timer';
 import TimerOffIcon from '@material-ui/icons/TimerOff';
+import {fetchDistanceMatix,} from './Redux/markers';
 
 
 
 const styles = theme => ({
   root: {
     width: '100%',
+    // display: 'flex',
+    // justifyContent: 'space-around'
   },
   grow: {
     flexGrow: 1,
@@ -114,7 +117,8 @@ class Nav extends Component {
           m: 0,
           s: 0
         },
-        started: false
+        started: false,
+        distMatrixIntervalId: 1
       }
     }
   }
@@ -137,16 +141,43 @@ class Nav extends Component {
           started: !state.timer.started
         }
       }
+    }, async() => {
+      if (this.state.timer.started){
+        let {origin, markers} = this.props;
+        if (markers.length){
+          console.log('setting time data!!!!!!')
+          try {
+            await this.props.setTimeData(origin);
+          } catch (error) {
+            console.error(error)
+          }
+        }
+        let distMatrixIntervalId = setInterval(async()=>{
+          origin = this.props.origin;
+          markers = this.props.markers;
+
+          if (markers.length){
+            console.log('setting time data!!!!!!')
+            try {
+              await this.props.setTimeData(origin);
+            } catch (error) {
+              console.error(error)
+            }
+          }
+        }, 30000);
+        this.setState({
+          distMatrixIntervalId
+        })
+      } else {
+        clearInterval(this.state.distMatrixIntervalId);
+      }
     }
     );
   }
   render(){
     const { classes, googlemap, centerButton } = this.props;
-    // console.log(googlemap);
-    // console.log('TIMER IS....', this.state.timer.started);
     const {timer} = this.state;
     const {h, m, s} = timer.input;
-    console.log(timer.input);
     return (
       <div className = {classes.root}>
         <AppBar position='fixed'>
@@ -219,7 +250,14 @@ Nav.propTypes = {
 };
 
 const mapState = ({markers, map}) => ({
-  googlemap: map.maps
+  googlemap: map.maps,
+  markers: markers.list
 })
 
-export default withStyles(styles)(connect(mapState)(Nav));
+const mapDispatch = (dispatch) => ({
+  setTimeData(...args){
+    dispatch(fetchDistanceMatix(...args));
+  },
+})
+
+export default withStyles(styles)(connect(mapState, mapDispatch)(Nav));

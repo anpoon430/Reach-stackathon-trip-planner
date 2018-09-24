@@ -9,14 +9,15 @@ import Car from '@material-ui/icons/TimeToLeave';
 import Walk from '@material-ui/icons/DirectionsWalk';
 import Bike from '@material-ui/icons/DirectionsBike';
 import { connect } from 'react-redux';
-
+import { setMode } from './Redux/markers';
 
 const styles = {
   root: {
     flexGrow: 1,
-    // maxWidth: 200,
   },
 };
+
+
 
 class BottomTabs extends React.Component {
   state = {
@@ -24,7 +25,7 @@ class BottomTabs extends React.Component {
   };
 
   handleChange = (event, value) => {
-    this.setState({ value });
+    this.props.getMode(value);
   };
 
   render() {
@@ -34,16 +35,15 @@ class BottomTabs extends React.Component {
       <footer id = 'bottom-tabs'>
         <Paper square className={classes.root}>
           <Tabs
-            value={this.state.value}
+            value={this.props.mode}
             onChange={this.handleChange}
             fullWidth
             indicatorColor="primary"
-            textColor="primary"
-          >
-            <Tab icon={<Car />} />
-            <Tab icon={<Subway />} />
-            <Tab icon={<Walk />} />
-            <Tab icon={<Bike />} />
+            textColor="primary">
+              <Tab icon={<Car />} />
+              <Tab icon={<Subway />} />
+              <Tab icon={<Walk />} />
+              <Tab icon={<Bike />} />
           </Tabs>
         </Paper>
       </footer>
@@ -55,4 +55,14 @@ BottomTabs.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(BottomTabs);
+const mapState = ({markers}) => ({
+  mode: markers.mode
+})
+
+const mapDispatch = dispatch => ({
+  getMode(mode){
+    dispatch(setMode(mode))
+  }
+})
+
+export default withStyles(styles)(connect(mapState,mapDispatch)(BottomTabs));

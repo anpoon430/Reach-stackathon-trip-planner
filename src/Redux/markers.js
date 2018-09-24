@@ -1,8 +1,14 @@
 import axios from 'axios';
 import { GOOGLE_API_KEY } from '../secrets';
+const modes = [
+  'DRIVING',
+  'TRANSIT',
+  'WALKING',
+  'BICYCLING'
+];
 
 const initialState = {
-  mode: 'DRIVING',
+  mode: 0, //use modes array to get string before request
   list: [],
   selected: {}, //currently selected marker, will display address, task,
   timer: {
@@ -16,6 +22,13 @@ const SET_MARKERS = 'SET_MARKERS';
 const ADD_MARKER = 'ADD_MARKER';
 const SET_MARKERS_WITH_TIME_DATA = 'SET_MARKERS_WITH_TIME_DATA';
 const REMOVE_MARKER = 'REMOVE_MARKER';
+const SET_MODE = 'SET_MODE';
+
+
+export const setMode = mode => ({
+  type: SET_MODE,
+  mode
+})
 
 export const removeMarker = idx => ({
   type: REMOVE_MARKER,
@@ -37,7 +50,7 @@ export const setMarkersWithTimeData = data => ({
   data
 })
 
-export const fetchDistanceMatix = (origin, destinations, mode) =>{
+export const fetchDistanceMatix = (origin) =>{
   return async (dispatch, getState) => {
     try {
       let state = getState();
@@ -46,12 +59,13 @@ export const fetchDistanceMatix = (origin, destinations, mode) =>{
       service.getDistanceMatrix(
         {
           origins: [origin],
-          destinations: destinations.map(
+          destinations: state.markers.list.map(
             marker => ({
+              ...marker,
               lat: marker.lat,
               lng: marker.lng
             })),
-          travelMode: mode,
+          travelMode: modes[state.markers.mode],
         }, callback
       );
 
@@ -105,9 +119,14 @@ const markers = (state = initialState, action) => {
       return {
         ...state,
         list: state.list.filter((marker, i) => {
-          console.log('REMOVING MARKER, INSIDE REDUCER', i);
+          // console.log('REMOVING MARKER, INSIDE REDUCER', i);
           return  i !== action.idx
         })
+      }
+    case SET_MODE:
+      return {
+        ...state,
+        mode: action.mode
       }
     default:
       return state
