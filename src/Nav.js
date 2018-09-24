@@ -12,7 +12,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 
 import SearchIcon from '@material-ui/icons/Search';
-import GpsFixed from '@material-ui/icons/GpsFixed';
+import GpsFixed from '@material-ui/icons/GpsFixedOutlined';
 
 import RouteIcon from '@material-ui/icons/Directions';
 
@@ -43,8 +43,11 @@ function msToTime(s) {
 const styles = theme => ({
   root: {
     width: '100%',
-    // display: 'flex',
-    // justifyContent: 'space-around'
+    color: 'white',
+  },
+  spacing: {
+    display: 'flex',
+    justifyContent: 'center'
   },
   grow: {
     flexGrow: 1,
@@ -84,7 +87,7 @@ const styles = theme => ({
     justifyContent: 'center',
   },
   inputRoot: {
-    color: 'inherit',
+    color: 'white',
     width: '100%',
   },
   inputInput: {
@@ -113,6 +116,7 @@ const styles = theme => ({
   timerInput:{
     width: 50,
     marginRight: 5,
+    color: 'white'
   }
 });
 
@@ -219,7 +223,7 @@ class Nav extends Component {
   }
   startTimer(){
     this.timerInterval = setInterval(() => {
-      console.log('SETTING TIME!!');
+      // console.log('SETTING TIME!!');
       this.setState((state)=>{
       return {timeLeft: state.timeLeft - 1000}
     }
@@ -231,7 +235,7 @@ class Nav extends Component {
     let formattedTime = msToTime(currentTimeRemaining);
     if ( currentTimeRemaining > 0) return <span>{formattedTime}</span>
     clearInterval(this.timerInterval);
-    return 'TIMEE!!!!'
+    return <span>00:00:00</span>
   }
   render(){
     const { classes, googlemap, centerButton } = this.props;
@@ -241,9 +245,13 @@ class Nav extends Component {
     // console.log(this.timer);
     // console.log('TIME REMAINING!!!!', this.timer);
     return (
-      <div className = {classes.root}>
-        <AppBar position='fixed'>
-          <Toolbar>
+      <div >
+        <AppBar position='fixed' className = {classes.root}>
+          <Toolbar className={classes.spacing}>
+            <IconButton
+              onClick={centerButton}>
+              <GpsFixed />
+            </IconButton>
             <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon />
@@ -251,14 +259,11 @@ class Nav extends Component {
                 {googlemap && googlemap.places &&
                 <SearchBox />}
               </div>
-              <div>
-            <IconButton
-              onClick={centerButton}>
-              <GpsFixed />
-            </IconButton>
+          <div>
                 <TextField
+                  style = {{color:'white'}}
                   className={classes.timerInput}
-                  label = 'H'
+                  label = 'HH'
                   type= 'number'
                   name = 'h'
                   onChange = {this.handleChange}
@@ -266,7 +271,7 @@ class Nav extends Component {
                   />
                 <TextField
                   className={classes.timerInput}
-                  label = 'M'
+                  label = 'MM'
                   type= 'number'
                   name = 'm'
                   onChange = {this.handleChange}
@@ -274,7 +279,7 @@ class Nav extends Component {
                   />
                 <TextField
                   className={classes.timerInput}
-                  label = 'S'
+                  label = 'SS'
                   type= 'number'
                   name = 's'
                   onChange = {this.handleChange}

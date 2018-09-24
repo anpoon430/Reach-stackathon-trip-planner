@@ -6,15 +6,31 @@ import store from './Redux/store';
 import "./App.css";
 
 import SimpleMap from "./GoogleMap";
+import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles'
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#00897b'
+    },
+    secondary: {
+      main: '#ffc400'
+    }
+  }
+})
+
+
+
 
 class App extends Component {
   render() {
     return (
     <Provider store = {store}>
         <Router>
-          <div className="App">
-            <SimpleMap />
-          </div>
+          <MuiThemeProvider theme ={theme}>
+            <div className="App">
+              <SimpleMap />
+            </div>
+          </MuiThemeProvider>
         </Router>
     </Provider>
     );

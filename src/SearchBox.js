@@ -10,10 +10,11 @@ import { addMarker } from './Redux/markers';
 
 const styles = theme => ({
   inputRoot: {
-    color: 'inherit',
+    color: 'white',
     width: '100%',
   },
   inputInput: {
+    color: 'white',
     paddingTop: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,

@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import GoogleMapReact from 'google-map-react';
-import { GOOGLE_API_KEY } from './secrets';
+// import { GOOGLE_API_KEY } from './secrets';
 import { connect } from 'react-redux';
 import { GeolocationMarker, Marker } from './Markers';
 import {setMap} from './Redux/map';
 import { addMarker, fetchDistanceMatix, removeMarker } from './Redux/markers';
 import BottomTabs from './BottomTabs';
 import Nav from './Nav';
-
+const GOOGLE_API_KEY = 'AIzaSyCUbutwSaXHoZUDXLUYjBXauofashboLXo';
 
 
 class SimpleMap extends Component {
@@ -41,19 +41,6 @@ class SimpleMap extends Component {
   }
   componentDidMount(){
     this.watchPosition();
-    // let distMatrixIntervalId = setInterval(async()=>{
-    //   const {mode} = this.props;
-    //   const origin = this.state.currentPosition;
-    //   const dest = this.props.markers;
-
-    //   if (dest && dest.length){
-    //     console.log('setting time data!!!!!!')
-    //     await this.props.setTimeData(origin, dest, mode);
-    //   }
-    // }, 30000)
-    // this.setState({
-    //   distMatrixIntervalId
-    // })
   }
 
   componentWillUnmount(){
@@ -174,7 +161,7 @@ const mapDispatch = dispatch => ({
     dispatch(addMarker(marker));
    },
    rmMarker(idx){
-     console.log('DISPATCHING ACTION REMOVE MARKER');
+    //  console.log('DISPATCHING ACTION REMOVE MARKER');
      dispatch(removeMarker(idx));
    }
 })

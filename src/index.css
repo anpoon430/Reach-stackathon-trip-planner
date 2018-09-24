@@ -1,6 +1,8 @@
 body {
   margin: 0;
   padding: 0;
+  font-family: Roboto;
+  color: white;
 }
 
 #google-map{
@@ -15,4 +17,9 @@ body {
 
 #bottom-tabs{
   height: 8vh;
+}
+
+#logo {
+  background-color: white;
+  color: black;
 }
