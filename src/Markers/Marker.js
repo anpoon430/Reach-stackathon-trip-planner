@@ -12,6 +12,7 @@ const styles = {
     backgroundColor: 'white',
     border: 'solid green 1.5px',
     borderRadius:5,
+    color: 'black',
     minWidth: 45,
     minHeight:15,
     transform: 'translate(-50%, -50%)'
@@ -22,6 +23,7 @@ const styles = {
     minHeight:15,
     backgroundColor: 'white',
     borderRadius:5,
+    color: 'black',
     border: 'solid green 1.5px',
     transform: 'translate(-50%, -50%) scale(1.5)',
   },
