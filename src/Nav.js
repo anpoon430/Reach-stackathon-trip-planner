@@ -13,10 +13,30 @@ import { withStyles } from '@material-ui/core/styles';
 
 import SearchIcon from '@material-ui/icons/Search';
 import GpsFixed from '@material-ui/icons/GpsFixed';
-import Countdown, {zeroPad} from 'react-countdown-now';
+
+import RouteIcon from '@material-ui/icons/Directions';
+
 import TimerIcon from '@material-ui/icons/Timer';
 import TimerOffIcon from '@material-ui/icons/TimerOff';
 import {fetchDistanceMatix, setReachability} from './Redux/markers';
+
+function msToTime(s) {
+
+  // Pad to 2 or 3 digits, default is 2
+  function pad(n, z) {
+    z = z || 2;
+    return ('00' + n).slice(-z);
+  }
+
+  var ms = s % 1000;
+  s = (s - ms) / 1000;
+  var secs = s % 60;
+  s = (s - secs) / 60;
+  var mins = s % 60;
+  var hrs = (s - mins) / 60;
+
+  return pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
+}
 
 
 
@@ -107,18 +127,6 @@ const convertTime = (timeObj) => {
   return miliseconds;
 }
 
-let timeLeft = 0;
-const Completionist = () => (<span>TIME!!!</span>)
-let renderer = ({ hours, minutes, seconds, completed }) => {
-  if (completed) {
-    // Render a completed state
-  return <Completionist />;
-  } else {
-// Render a countdown
-  timeLeft = Math.floor(convertTime({h: hours, m: minutes, s: seconds})/1000);
-  return <span>{zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
-  }
-};
 
 class Nav extends Component {
   constructor(props){
@@ -131,7 +139,8 @@ class Nav extends Component {
           s: 0
         },
         started: false,
-      }
+      },
+      timeLeft: 0
     }
     this.distMatrixIntervalId = 1;
     }
@@ -155,42 +164,82 @@ class Nav extends Component {
         }
       }
     }, async() => {
+      const {timer} = this.state;
+      const {h, m, s} = timer.input;
       if (this.state.timer.started){
-        let {origin, markers} = this.props;
-        if (markers.length){
-          console.log('setting time data!!!!!!')
-          try {
-            await this.props.setTimeData(origin);
-            this.props.getReachability(timeLeft);
-          } catch (error) {
-            console.error(error)
-          }
-        }
-        let distMatrixIntervalId = setInterval(async()=>{
-          origin = this.props.origin;
-          markers = this.props.markers;
 
-          if (markers.length){
-            console.log('setting time data!!!!!!')
-            try {
-              await this.props.setTimeData(origin);
-              this.props.getReachability(timeLeft);
-            } catch (error) {
-              console.error(error)
-            }
-          }
+        let convertedTime = convertTime({h, m, s});
+
+        this.timerInterval = 0;
+        this.start = Date.now();
+        this.timeToStopAt = convertedTime + this.start;
+        this.setState({
+          timeLeft: this.timeToStopAt
+        });
+        let currentTimeRemaining = this.timeToStopAt - Date.now();
+        this.startTimer();
+
+        await this.loadTimeAndReach();
+        let distMatrixIntervalId = setInterval(async()=>{
+          await this.loadTimeAndReach()
+          // origin = this.props.origin;
+          // markers = this.props.markers;
+
+          // if (markers.length){
+          //   console.log('setting time data!!!!!!')
+          //   try {
+          //     await this.props.setTimeData(origin);
+          //     this.props.getReachability(Math.floor(currentTimeRemaining/1000));
+          //   } catch (error) {
+          //     console.error(error)
+          //   }
+          // }
         }, 30000);
         this.distMatrixIntervalId = distMatrixIntervalId;
       } else {
+
+        clearInterval(this.timerInterval);
         clearInterval(this.distMatrixIntervalId);
       }
     }
     );
   }
+  loadTimeAndReach = async() =>{
+    let currentTimeRemaining = this.timeToStopAt - Date.now();
+    let {origin, markers} = this.props;
+        if (markers.length){
+          console.log('setting time data!!!!!!')
+          try {
+            await this.props.setTimeData(origin);
+            this.props.getReachability(Math.floor(currentTimeRemaining/1000));
+          } catch (error) {
+            console.error(error)
+          }
+        }
+  }
+  startTimer(){
+    this.timerInterval = setInterval(() => {
+      console.log('SETTING TIME!!');
+      this.setState((state)=>{
+      return {timeLeft: state.timeLeft - 1000}
+    }
+  )}, 1000);
+  }
+  renderTime(){
+    let currentTimeRemaining = this.timeToStopAt - Date.now();
+    console.log(formattedTime);
+    let formattedTime = msToTime(currentTimeRemaining);
+    if ( currentTimeRemaining > 0) return <span>{formattedTime}</span>
+    clearInterval(this.timerInterval);
+    return 'TIMEE!!!!'
+  }
   render(){
     const { classes, googlemap, centerButton } = this.props;
     const {timer} = this.state;
     const {h, m, s} = timer.input;
+    // let remainingTime;
+    // console.log(this.timer);
+    // console.log('TIME REMAINING!!!!', this.timer);
     return (
       <div className = {classes.root}>
         <AppBar position='fixed'>
@@ -203,13 +252,10 @@ class Nav extends Component {
                 <SearchBox />}
               </div>
               <div>
-                <IconButton>
-                  {
-                    this.state.timer.started ?
-                    <TimerOffIcon onClick={this.handleClick} />
-                    : <TimerIcon onClick={this.handleClick}/>
-                  }
-                </IconButton>
+            <IconButton
+              onClick={centerButton}>
+              <GpsFixed />
+            </IconButton>
                 <TextField
                   className={classes.timerInput}
                   label = 'H'
@@ -217,7 +263,7 @@ class Nav extends Component {
                   name = 'h'
                   onChange = {this.handleChange}
                   value = {this.state.timer.input.h || 0}
-                />
+                  />
                 <TextField
                   className={classes.timerInput}
                   label = 'M'
@@ -225,7 +271,7 @@ class Nav extends Component {
                   name = 'm'
                   onChange = {this.handleChange}
                   value = {this.state.timer.input.m || 0}
-                />
+                  />
                 <TextField
                   className={classes.timerInput}
                   label = 'S'
@@ -233,23 +279,20 @@ class Nav extends Component {
                   name = 's'
                   onChange = {this.handleChange}
                   value = {this.state.timer.input.s || 0}
-                />
+                  />
+                  <IconButton>
+                    {
+                      this.state.timer.started ?
+                      <TimerOffIcon onClick={this.handleClick} />
+                      : <TimerIcon onClick={this.handleClick}/>
+                    }
+                  </IconButton>
+                  {this.renderTime()}
+                  <IconButton
+                    onClick={this.loadTimeAndReach}>
+                    <RouteIcon />
+                  </IconButton>
               </div>
-            {timer.started ?
-              <Countdown date = {
-                Date.now() + convertTime(timer.input)}
-                daysInHours = {true}
-                renderer = {renderer}
-                >
-            </Countdown>
-                : <span>{zeroPad(h)}:{zeroPad(m)}:{zeroPad(s)}</span>
-            }
-
-            <IconButton
-              onClick={centerButton}>
-              <GpsFixed />
-            </IconButton>
-
           </Toolbar>
         </AppBar>
       </div>

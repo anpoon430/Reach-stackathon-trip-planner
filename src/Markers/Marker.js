@@ -11,22 +11,22 @@ const styles = {
     padding: 3,
     backgroundColor: 'white',
     border: 'solid green 1.5px',
-    width: 45,
-    height:15,
+    minWidth: 45,
+    minHeight:15,
     transform: 'translate(-50%, -50%)'
   },
   markerReachableHover: {
     padding: 3,
-    width: 45,
-    height:15,
+    minWidth: 45,
+    minHeight:15,
     backgroundColor: 'white',
     border: 'solid green 1.5px',
     transform: 'translate(-50%, -50%) scale(1.5)',
   },
   markerNotReachable: {
     padding: 3,
-    width: 45,
-    height:15,
+    minWidth: 45,
+    minHeight:15,
     backgroundColor: 'white',
     color: 'black',
     border: 'solid red 1.5px',
@@ -34,8 +34,8 @@ const styles = {
   },
   markerNotReachableHover: {
     padding: 3,
-    width: 45,
-    height:15,
+    minWidth: 45,
+    minHeight:15,
     backgroundColor: 'white',
     color: 'black',
     border: 'solid red 1.5px',
@@ -62,7 +62,7 @@ const Marker = props => {
   return (
       <div className = {classes[reach[reachable][hover]]} >
         <div>
-          {duration}
+          <strong>{duration}</strong>
         </div>
        {props.$hover &&
        <div>
