@@ -84,28 +84,30 @@ class SearchBox extends Component {
                   input: classes.inputInput,
                 }}
               />
-              <div className="autocomplete-dropdown-container">
-                {loading && <div>Loading...</div>}
-                {suggestions.map(suggestion => {
-                  const className = suggestion.active
-                    ? 'suggestion-item--active'
-                    : 'suggestion-item';
 
-                  const style = suggestion.active
-                    ? { backgroundColor:  '#00897b', cursor: 'pointer', width: '255px'}
-                    : { backgroundColor: '#33ab9f', cursor: 'pointer', color: 'white', width: '255px' };
-                  return (
-                    <div
-                      {...getSuggestionItemProps(suggestion, {
-                        className,
-                        style,
-                      })}
-                    >
-                      <span>{suggestion.description}</span>
-                    </div>
-                  );
-                })}
-              </div>
+                <div className="autocomplete-dropdown-container">
+                  {loading && <div>Loading...</div>}
+                  {suggestions.map(suggestion => {
+                    const className = suggestion.active
+                      ? 'suggestion-item--active'
+                      : 'suggestion-item';
+
+                    const style = suggestion.active
+                      ? { backgroundColor:  '#00897b', cursor: 'pointer', width: '288px'}
+                      : { backgroundColor: '#33ab9f', cursor: 'pointer', color: 'white', width: '288px' };
+                    return (
+                      <div
+                        {...getSuggestionItemProps(suggestion, {
+                          className,
+                          style,
+                        })}
+                      >
+                        <span>{suggestion.description}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+
             </div>
           )}
         </PlacesAutocomplete>
