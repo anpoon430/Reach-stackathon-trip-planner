@@ -68,6 +68,7 @@ class SearchBox extends Component {
         value = {this.state.search}
         onChange = {this.handleChange}
         onSelect = {this.handleSelect}
+        classNames = {{autocompleteContainer: 'ac-container'}}
         // searchOptions = {options}
         >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -89,10 +90,10 @@ class SearchBox extends Component {
                   const className = suggestion.active
                     ? 'suggestion-item--active'
                     : 'suggestion-item';
-                  // inline style for demonstration purpose
+
                   const style = suggestion.active
-                    ? { backgroundColor: 'grey', cursor: 'pointer', }
-                    : { backgroundColor: 'inherit', cursor: 'pointer' };
+                    ? { backgroundColor:  '#00897b', cursor: 'pointer', width: '255px'}
+                    : { backgroundColor: '#33ab9f', cursor: 'pointer', color: 'white', width: '255px' };
                   return (
                     <div
                       {...getSuggestionItemProps(suggestion, {

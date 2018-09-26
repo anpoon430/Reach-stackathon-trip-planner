@@ -184,29 +184,15 @@ class Nav extends Component {
         this.startTimer();
 
         await this.loadTimeAndReach();
-        let distMatrixIntervalId = setInterval(async()=>{
+        this.distMatrixIntervalId = setInterval(async()=>{
           await this.loadTimeAndReach()
-          // origin = this.props.origin;
-          // markers = this.props.markers;
-
-          // if (markers.length){
-          //   console.log('setting time data!!!!!!')
-          //   try {
-          //     await this.props.setTimeData(origin);
-          //     this.props.getReachability(Math.floor(currentTimeRemaining/1000));
-          //   } catch (error) {
-          //     console.error(error)
-          //   }
-          // }
         }, 30000);
-        this.distMatrixIntervalId = distMatrixIntervalId;
-      } else {
 
+      } else {
         clearInterval(this.timerInterval);
         clearInterval(this.distMatrixIntervalId);
       }
-    }
-    );
+    })
   }
   loadTimeAndReach = async() =>{
     let currentTimeRemaining = this.timeToStopAt - Date.now();
@@ -233,7 +219,7 @@ class Nav extends Component {
     let currentTimeRemaining = this.timeToStopAt - Date.now();
     console.log(formattedTime);
     let formattedTime = msToTime(currentTimeRemaining);
-    if ( currentTimeRemaining > 0) return <span>{formattedTime}</span>
+    if ( currentTimeRemaining > 0 && this.state.timer.started) return <span>{formattedTime}</span>
     clearInterval(this.timerInterval);
     return <span>00:00:00</span>
   }

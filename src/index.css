@@ -12,7 +12,9 @@ body {
 }
 
 .autocomplete-dropdown-container{
-  overflow: visible;
+ overflow: scroll;
+ z-index: 1000;
+ position:fixed;
 }
 
 #bottom-tabs{
@@ -23,3 +25,12 @@ body {
   background-color: white;
   color: black;
 }
+
+/* .ac-container {
+  position: fixed;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #555555;
+  width: 100%;
+  z-index: 1000;
+} */

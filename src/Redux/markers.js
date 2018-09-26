@@ -108,7 +108,7 @@ const markers = (state = initialState, action) => {
       return {
         ...state,
         list: state.list.map((marker, i) => {
-          if (action.timeData[i].status !== 'OK') {
+          if ((action.timeData && action.timeData[i]) && (action.timeData[i].status !== 'OK')) {
             return {
               ...marker,
               duration: '?',
