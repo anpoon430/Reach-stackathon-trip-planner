@@ -1,5 +1,7 @@
 # Reach - trip timer web app
-## Reach is a real-time trip timer application that will help you decide which points of interests you can reach when you only have a limited amount of time.
+Reach is a real-time trip timer application that will help you decide which points of interests you can reach when you only have a limited amount of time.
+
+![](screencast.gif)
 
 A trip timer application where you can enter points of interests and see whether you can still reach them given your remaining time. React was used to render the travel times dynamically on a Google map, and Redux was used for state management. Material-UI react components were used to style the web app. Google Maps Distance Matrix API was used to obtain the travel time data. Built during a 3 day hackathon at FullStack Academy.
 
