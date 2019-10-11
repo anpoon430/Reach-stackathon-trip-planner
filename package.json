@@ -5,7 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.1.0",
     "@material-ui/icons": "^3.0.1",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "convert-hrtime": "^2.0.0",
     "google-map-react": "^1.0.7",
     "hh-mm-ss": "^1.2.0",
