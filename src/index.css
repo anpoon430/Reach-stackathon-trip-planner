@@ -6,13 +6,38 @@ body {
 }
 
 #google-map{
-  height: 82vh;
+  height: 86vh;
   width: 100%;
-  margin-top: 10vh;
+  margin-top: 8vh;
+}
+#appbar{
+  height: 8vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media (max-width: 600px){
+  #google-map{
+    height: 86vh;
+    width: 100%;
+    margin-top: 8vh;
+  }
+  #appbar{
+    height: 8vh;
+  }
+}
+@media (max-height: 700px){
+  #google-map{
+    height: 82vh;
+    width: 100%;
+    margin-top: 10vh;
+  }
+  #appbar{
+    height: 10vh;
+  }
 }
 
 .autocomplete-dropdown-container{
- overflow: scroll;
  z-index: 1000;
  position:fixed;
  display:flex;
@@ -28,11 +53,3 @@ body {
   color: black;
 }
 
-/* .ac-container {
-  position: fixed;
-  top: 100%;
-  background-color: white;
-  border: 1px solid #555555;
-  width: 100%;
-  z-index: 1000;
-} */

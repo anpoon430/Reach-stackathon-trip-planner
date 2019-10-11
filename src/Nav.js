@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { AppBar, TextField } from '@material-ui/core';
@@ -10,6 +10,9 @@ import PropTypes from 'prop-types';
 import Badge from '@material-ui/core/Badge';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
+import MoreIcon from '@material-ui/icons/MoreVert';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import SearchIcon from '@material-ui/icons/Search';
 import GpsFixed from '@material-ui/icons/GpsFixedOutlined';
@@ -143,11 +146,30 @@ class Nav extends Component {
           s: 0
         },
         started: false,
+        anchorEl: null,
+        mobileMoreAnchorEl: null,
       },
       timeLeft: 0
     }
     this.distMatrixIntervalId = 1;
     }
+
+    handleProfileMenuOpen = event => {
+      this.setState({ anchorEl: event.currentTarget });
+    };
+
+    handleMenuClose = () => {
+      this.setState({ anchorEl: null });
+      this.handleMobileMenuClose();
+    };
+
+    handleMobileMenuOpen = event => {
+      this.setState({ mobileMoreAnchorEl: event.currentTarget });
+    };
+
+    handleMobileMenuClose = () => {
+      this.setState({ mobileMoreAnchorEl: null });
+    };
   handleChange = (evt) => {
     this.setState({
       timer: {
@@ -209,7 +231,6 @@ class Nav extends Component {
   }
   startTimer(){
     this.timerInterval = setInterval(() => {
-      // console.log('SETTING TIME!!');
       this.setState((state)=>{
       return {timeLeft: state.timeLeft - 1000}
     }
@@ -225,14 +246,98 @@ class Nav extends Component {
   }
   render(){
     const { classes, googlemap, centerButton } = this.props;
+    const { anchorEl, mobileMoreAnchorEl } = this.state;
+
     const {timer} = this.state;
     const {h, m, s} = timer.input;
-    // let remainingTime;
-    // console.log(this.timer);
-    // console.log('TIME REMAINING!!!!', this.timer);
+    const isMenuOpen = Boolean(anchorEl);
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const renderTimer = (
+      <Fragment>
+        <TextField
+                    style = {{color:'white'}}
+                    className={classes.timerInput}
+                    label = 'HH'
+                    type= 'number'
+                    name = 'h'
+                    onChange = {this.handleChange}
+                    value = {this.state.timer.input.h || 0}
+                    />
+                  <TextField
+                    className={classes.timerInput}
+                    label = 'MM'
+                    type= 'number'
+                    name = 'm'
+                    onChange = {this.handleChange}
+                    value = {this.state.timer.input.m || 0}
+                    />
+                  <TextField
+                    className={classes.timerInput}
+                    label = 'SS'
+                    type= 'number'
+                    name = 's'
+                    onChange = {this.handleChange}
+                    value = {this.state.timer.input.s || 0}
+                    />
+                    <IconButton>
+                      {
+                        this.state.timer.started ?
+                        <TimerOffIcon onClick={this.handleClick} />
+                        : <TimerIcon onClick={this.handleClick}/>
+                      }
+                    </IconButton>
+      </Fragment>
+    )
+
+    const renderTimerDisplay = (
+      <div style = {{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', lineHeight: '8vh'}}>
+        {this.renderTime()}
+      </div>
+    )
+
+    const renderMenu = (
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMenuOpen}
+        onClose={this.handleMenuClose}
+      >
+
+      </Menu>
+    );
+
+    const renderMobileMenu = (
+      <Menu
+        anchorEl={mobileMoreAnchorEl}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMobileMenuOpen}
+        onClose={this.handleMenuClose}
+      >
+        <MenuItem onClick={this.handleMobileMenuClose}>
+          {renderTimer}
+        </MenuItem>
+        <MenuItem
+          style =  {{textAlign: 'center'}}
+        onClick={this.handleMobileMenuClose}>
+          {renderTimerDisplay}
+        </MenuItem>
+        <MenuItem onClick={this.handleProfileMenuOpen}>
+        <IconButton
+                      onClick={this.loadTimeAndReach}>
+                      <RouteIcon />
+                    </IconButton>
+          <p>Get travel times</p>
+        </MenuItem>
+      </Menu>
+    );
+
+
+
     return (
       <div >
-        <AppBar position='fixed' className = {classes.root}>
+        <AppBar position='fixed' className = {classes.root} id = "appbar">
           <Toolbar className={classes.spacing}>
             <IconButton
               onClick={centerButton}>
@@ -245,47 +350,24 @@ class Nav extends Component {
                 {googlemap && googlemap.places &&
                 <SearchBox />}
               </div>
-          <div>
-                <TextField
-                  style = {{color:'white'}}
-                  className={classes.timerInput}
-                  label = 'HH'
-                  type= 'number'
-                  name = 'h'
-                  onChange = {this.handleChange}
-                  value = {this.state.timer.input.h || 0}
-                  />
-                <TextField
-                  className={classes.timerInput}
-                  label = 'MM'
-                  type= 'number'
-                  name = 'm'
-                  onChange = {this.handleChange}
-                  value = {this.state.timer.input.m || 0}
-                  />
-                <TextField
-                  className={classes.timerInput}
-                  label = 'SS'
-                  type= 'number'
-                  name = 's'
-                  onChange = {this.handleChange}
-                  value = {this.state.timer.input.s || 0}
-                  />
-                  <IconButton>
-                    {
-                      this.state.timer.started ?
-                      <TimerOffIcon onClick={this.handleClick} />
-                      : <TimerIcon onClick={this.handleClick}/>
-                    }
-                  </IconButton>
-                  {this.renderTime()}
-                  <IconButton
-                    onClick={this.loadTimeAndReach}>
-                    <RouteIcon />
-                  </IconButton>
+            <div className={classes.grow}></div>
+          <div className = {classes.sectionDesktop}>
+                {renderTimer}
+                {renderTimerDisplay}
+                <IconButton
+                      onClick={this.loadTimeAndReach}>
+                      <RouteIcon />
+                    </IconButton>
               </div>
+              <div className={classes.sectionMobile}>
+              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+                <MoreIcon />
+              </IconButton>
+            </div>
           </Toolbar>
         </AppBar>
+        {renderMenu}
+        {renderMobileMenu}
       </div>
     )
   }
