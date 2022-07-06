@@ -9,7 +9,7 @@
     "convert-hrtime": "^2.0.0",
     "google-map-react": "^1.0.7",
     "hh-mm-ss": "^1.2.0",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "moment-duration-format": "^2.2.2",
     "moment-timer": "^1.2.3",
     "react": "^16.5.0",
